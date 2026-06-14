@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <header class="topbar dashboard-topbar">
+    <div>
+      <h2>Dashboard</h2>
+      <p class="page-subtitle" id="dashboard-title">Autonomous Growth Dashboard</p>
+    </div>
+
+    <div class="topbar-tools">
+      <div class="top-product-search-wrap">
+        <label class="search-box">
+          <span aria-hidden="true"></span>
+          <input id="top-product-search" type="search" placeholder="Search products" aria-label="Search products" autocomplete="off" aria-controls="top-product-results" aria-expanded="false">
+        </label>
+        <div class="product-search-dropdown top-product-search-dropdown" id="top-product-results" role="listbox" hidden></div>
+      </div>
+      <button class="round-tool" type="button" aria-label="Messages">...</button>
+      <button class="round-tool notification-tool" type="button" aria-label="Notifications"></button>
+      <div class="profile-pill">
+        <span>Demo Seller</span>
+        <div class="avatar" aria-hidden="true">DS</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="dashboard-layout">
+    <div class="dashboard-left">
+      <article class="balance-card">
+        <div class="balance-pattern" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="signal-waves" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <h3 id="seller-card-name">Demo Seller</h3>
+        <div class="balance-meta">
+          <div>
+            <span>Total Revenue</span>
+            <strong id="wallet-balance">PKR 0</strong>
+          </div>
+          <div>
+            <span>API</span>
+            <strong id="wallet-platform">Daraz</strong>
+          </div>
+          <div>
+            <span>Window</span>
+            <strong id="wallet-window">84d</strong>
+          </div>
+        </div>
+      </article>
+
+      <form id="store-form" class="quick-action-card control-form">
+        <label for="seller-name">Seller</label>
+        <input id="seller-name" name="sellerName" value="Demo Seller" autocomplete="organization">
+
+        <label for="platform">Store API</label>
+        <select id="platform" name="platform">
+          <option>Daraz</option>
+          <option>Shopify</option>
+          <option>Foodpanda Vendors</option>
+          <option>Custom API / CSV</option>
+        </select>
+
+        <label for="monthly-budget">Monthly ad budget</label>
+        <input id="monthly-budget" name="monthlyBudget" type="number" value="250000" min="25000" step="5000">
+
+        <label for="horizon-days">Analysis window</label>
+        <select id="horizon-days" name="horizonDays">
+          <option value="84">Last 12 weeks</option>
+          <option value="56">Last 8 weeks</option>
+          <option value="28">Last 4 weeks</option>
+        </select>
+
+        <button class="primary-action" type="submit">Connect Store</button>
+      </form>
+
+      <div class="quick-actions">
+        <button type="submit" form="store-form"><span></span>Connect</button>
+        <a href="{{ url_for('insights') }}"><span></span>Insights</a>
+        <a href="{{ url_for('campaigns') }}"><span></span>Campaigns</a>
+        <button id="generate-report" type="button"><span></span>Report</button>
+      </div>
+
+      <article class="panel soft-panel">
+        <div class="panel-heading compact">
+          <h3>Monthly Limit</h3>
+          <button class="dots-button" type="button" aria-label="More"></button>
+        </div>
+        <div class="limit-row">
+          <strong id="budget-used">PKR 0</strong>
+          <span>spent of <span id="budget-total">PKR 0</span></span>
+          <b id="budget-share">0%</b>
+        </div>
+        <div class="progress-track"><span id="budget-bar"></span></div>
+      </article>
+
+      <article class="panel soft-panel">
+        <div class="panel-heading compact">
+          <div>
+            <h3>Growth Plans</h3>
+            <p class="page-subtitle">Top inventory actions</p>
+          </div>
+          <a href="{{ url_for('campaigns') }}" class="text-action">Add Plan</a>
+        </div>
+        <div id="growth-plans" class="plan-list"></div>
+      </article>
+    </div>
+
+    <div class="dashboard-main">
+      <section class="metric-grid hero-metrics" aria-label="Key metrics">
+        <article class="metric-card">
+          <div class="metric-icon"></div>
+          <small id="metric-revenue-growth">0%</small>
+          <strong id="metric-revenue">PKR 0</strong>
+          <span>Sales This Month</span>
+        </article>
+        <article class="metric-card">
+          <div class="metric-icon expense"></div>
+          <small id="metric-profit-growth">0%</small>
+          <strong id="metric-profit">PKR 0</strong>
+          <span>Profit or Loss</span>
+        </article>
+        <article class="metric-card">
+          <div class="metric-icon savings"></div>
+          <small id="metric-ad-growth">Expense 0%</small>
+          <strong id="metric-roas">PKR 0</strong>
+          <span>Expenses This Month</span>
+        </article>
+      </section>
+
+      <article class="panel cashflow-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Sales Overview</h3>
+            <p class="page-subtitle">Income, expense, and profit</p>
+          </div>
+          <div class="status-pill" id="connection-status">Ready</div>
+        </div>
+        <div class="cashflow-summary">
+          <span>Sales this month</span>
+          <strong id="cashflow-total">PKR 0</strong>
+        </div>
+        <canvas id="revenue-chart" width="940" height="330"></canvas>
+      </article>
+
+      <article class="panel product-demand-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Top Selling Products</h3>
+            <p class="page-subtitle">Product demand by units sold</p>
+          </div>
+        </div>
+        <canvas id="product-demand-chart" width="940" height="280"></canvas>
+      </article>
+
+      <article class="panel transactions-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Products</h3>
+            <p class="page-subtitle" id="updated-at">Not analyzed</p>
+          </div>
+          <span class="filter-count" id="filter-count">0 products</span>
+        </div>
+        <form class="product-filter-grid" id="product-filter-form">
+          <div class="product-filter-label product-search-field">
+            <label for="product-filter-name">Product name</label>
+            <input id="product-filter-name" type="search" placeholder="Search by name" autocomplete="off" aria-controls="product-filter-results" aria-expanded="false">
+            <div class="product-search-dropdown" id="product-filter-results" role="listbox" hidden></div>
+          </div>
+          <label>
+            <span>Category</span>
+            <select id="product-filter-category">
+              <option value="">All categories</option>
+            </select>
+          </label>
+          <label>
+            <span>Stock status</span>
+            <select id="product-filter-stock">
+              <option value="">All stock</option>
+              <option>Low stock</option>
+              <option>Healthy stock</option>
+              <option>Overstocked</option>
+            </select>
+          </label>
+          <label>
+            <span>Demand level</span>
+            <select id="product-filter-demand">
+              <option value="">All demand</option>
+              <option>High demand</option>
+              <option>Medium demand</option>
+              <option>Low demand</option>
+            </select>
+          </label>
+          <label>
+            <span>Min price</span>
+            <input id="product-filter-min-price" type="number" min="0" step="100" placeholder="0">
+          </label>
+          <label>
+            <span>Max price</span>
+            <input id="product-filter-max-price" type="number" min="0" step="100" placeholder="Any">
+          </label>
+          <button class="secondary-action" id="product-filter-reset" type="button">Reset</button>
+        </form>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Demand</th>
+                <th>Suggestion</th>
+              </tr>
+            </thead>
+            <tbody id="product-table"></tbody>
+          </table>
+        </div>
+      </article>
+    </div>
+
+    <div class="dashboard-right">
+      <article class="panel statistic-panel">
+        <div class="panel-heading">
+          <h3>Statistic</h3>
+          <a class="text-action" href="{{ url_for('insights') }}">This Month</a>
+        </div>
+        <div class="stat-tabs" role="tablist" aria-label="Statistic type">
+          <button class="active" type="button" data-stat-mode="income" aria-pressed="true">Income</button>
+          <button type="button" data-stat-mode="expense" aria-pressed="false">Expense</button>
+        </div>
+        <div class="stat-ring" id="stat-ring">
+          <div>
+            <span id="stat-label">Income</span>
+            <strong id="stat-total">PKR 0</strong>
+          </div>
+        </div>
+        <div class="category-list" id="statistic-list"></div>
+      </article>
+
+      <article class="panel activity-panel">
+        <div class="panel-heading">
+          <h3>Recent Activity</h3>
+          <button class="dots-button" type="button" aria-label="More"></button>
+        </div>
+        <div class="activity-date">Today</div>
+        <div class="activity-list" id="activity-list"></div>
+      </article>
+
+      <article class="panel seasonal-panel">
+        <div class="panel-heading compact">
+          <div>
+            <h3>Seasonal Demand</h3>
+            <p class="page-subtitle" id="seasonal-season">Current season</p>
+          </div>
+        </div>
+        <canvas id="seasonal-demand-chart" width="360" height="220"></canvas>
+        <div class="seasonal-list" id="seasonal-demand-list"></div>
+        <p class="seasonal-note" id="seasonal-tracking-note"></p>
+      </article>
+    </div>
+  </section>
+
+  <div class="product-modal" id="product-detail-modal" role="dialog" aria-modal="true" aria-labelledby="product-modal-title" hidden>
+    <div class="product-modal-backdrop" data-close-product-modal></div>
+    <article class="product-modal-card">
+      <button class="product-modal-close" type="button" data-close-product-modal aria-label="Close product details">×</button>
+      <div class="product-modal-header">
+        <span class="product-modal-category" id="product-modal-category">Product</span>
+        <h3 id="product-modal-title">Product Details</h3>
+        <p id="product-modal-trend" class="page-subtitle"></p>
+      </div>
+      <div class="product-modal-grid">
+        <div>
+          <span>Price</span>
+          <strong id="product-modal-price">PKR 0</strong>
+        </div>
+        <div>
+          <span>Stock</span>
+          <strong id="product-modal-stock">0 left</strong>
+        </div>
+        <div>
+          <span>Demand</span>
+          <strong id="product-modal-demand">Demand</strong>
+        </div>
+        <div>
+          <span>Units Sold</span>
+          <strong id="product-modal-units">0</strong>
+        </div>
+      </div>
+      <div class="product-modal-suggestion">
+        <span>Suggestion</span>
+        <p id="product-modal-suggestion"></p>
+      </div>
+    </article>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}

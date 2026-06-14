@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page_title|default("Smart E-Commerce Growth Agent") }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Application navigation">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <h1>GROWNEST</h1>
+          <button class="mobile-menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        {% include "partials/nav.html" %}
+
+        {% block sidebar_extra %}
+          <div class="sidebar-card pro-card">
+            <div class="pro-icon">GA</div>
+            <p>Unlock deeper seller analytics, campaign scoring, and automated weekly reports.</p>
+            <a href="{{ url_for('reports_page') }}">View Reports</a>
+          </div>
+        {% endblock %}
+      </aside>
+
+      <main class="workspace">
+        {% block content %}{% endblock %}
+        <footer class="workspace-footer">
+          <span>Copyright 2026 Growth Agent</span>
+          <a href="{{ url_for('insights') }}">Insights</a>
+          <a href="{{ url_for('campaigns') }}">Campaigns</a>
+          <a href="{{ url_for('reports_page') }}">Reports</a>
+        </footer>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="{{ url_for('static', filename='js/responsive_tables.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/navigation.js') }}"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

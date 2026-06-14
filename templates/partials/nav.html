@@ -1,0 +1,9 @@
+<nav class="side-nav" id="primary-navigation" aria-label="Primary">
+  {% for item in nav_items %}
+    <a class="nav-link {% if item.endpoint == active_page %}active{% endif %}" href="{{ url_for(item.endpoint) }}">
+      <span class="nav-icon icon-{{ item.icon }}" aria-hidden="true"></span>
+      <span>{{ item.label }}</span>
+    </a>
+  {% endfor %}
+</nav>
+

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% set page_title = "Connectors - Smart E-Commerce Growth Agent" %}
+
+{% block content %}
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Store API Layer</p>
+      <h2>Connectors</h2>
+    </div>
+    <div class="status-pill">4 Sources</div>
+  </header>
+
+  <section class="page-grid four">
+    {% for connector in connectors %}
+      <article class="panel connector-card">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">{{ connector.status }}</p>
+            <h3>{{ connector.name }}</h3>
+          </div>
+          <span>{{ connector.health }}</span>
+        </div>
+        <div class="stack-list">
+          <div>
+            <strong>Synced Data</strong>
+            <p>{{ connector.sync }}</p>
+          </div>
+          <div>
+            <strong>Cadence</strong>
+            <p>{{ connector.cadence }}</p>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+
+  <section class="content-grid">
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Schema</p>
+          <h3>Normalized Sales Fields</h3>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Used For</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>orders</td>
+              <td>Revenue, conversion, AOV</td>
+              <td>{{ analysis.overview.units }} units</td>
+            </tr>
+            <tr>
+              <td>products</td>
+              <td>Ranking, bundling, margin</td>
+              <td>{{ analysis.products[0].product }}</td>
+            </tr>
+            <tr>
+              <td>inventory</td>
+              <td>Stock push recommendations</td>
+              <td>{{ analysis.products[0].stock }} average stock</td>
+            </tr>
+            <tr>
+              <td>marketing</td>
+              <td>ROAS, CPA, budget shifts</td>
+              <td>{{ analysis.channels[0].channel }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Pipeline</p>
+          <h3>Sync Status</h3>
+        </div>
+      </div>
+      <div class="timeline-list">
+        {% for step in analysis.agentSteps %}
+          <div class="timeline-item">
+            <span></span>
+            <div>
+              <strong>{{ step.label }}</strong>
+              <p>{{ step.status }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+{% endblock %}
+

@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% set page_title = "Campaigns - Smart E-Commerce Growth Agent" %}
+
+{% block content %}
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Growth Strategy</p>
+      <h2>Campaigns</h2>
+    </div>
+    <div class="status-pill">{{ monthly_budget|money }}/mo</div>
+  </header>
+
+  <section class="recommendation-grid">
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Promotions</p>
+          <h3>Offer Queue</h3>
+        </div>
+      </div>
+      <div class="recommendation-list">
+        {% for item in analysis.recommendations.promotions %}
+          <div class="recommendation">
+            <span>{{ item.impact }}</span>
+            <strong>{{ item.title }}</strong>
+            <p>{{ item.action }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Bundles</p>
+          <h3>AOV Lifts</h3>
+        </div>
+      </div>
+      <div class="recommendation-list">
+        {% for item in analysis.recommendations.bundles %}
+          <div class="recommendation">
+            <span>{{ item.impact }}</span>
+            <strong>{{ item.title }}</strong>
+            <p>{{ item.action }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Ad Spend</p>
+          <h3>Budget Moves</h3>
+        </div>
+      </div>
+      <div class="recommendation-list">
+        {% for item in analysis.recommendations.adSpend %}
+          <div class="recommendation">
+            <span>{{ item.impact }}</span>
+            <strong>{{ item.title }}</strong>
+            <p>{{ item.action }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section class="content-grid">
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Channels</p>
+          <h3>Spend Planner</h3>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Channel</th>
+              <th>Revenue</th>
+              <th>Ad Spend</th>
+              <th>ROAS</th>
+              <th>CPA</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for channel in analysis.channels %}
+              <tr>
+                <td>{{ channel.channel }}</td>
+                <td>{{ channel.revenue|money }}</td>
+                <td>{{ channel.adSpend|money }}</td>
+                <td>{{ channel.roas }}x</td>
+                <td>{{ channel.cpa|money }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Launch Plan</p>
+          <h3>Next 7 Days</h3>
+        </div>
+      </div>
+      <div class="timeline-list">
+        <div class="timeline-item">
+          <span></span>
+          <div>
+            <strong>Day 1</strong>
+            <p>Refresh product titles, images, and stock alerts for top SKUs.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span></span>
+          <div>
+            <strong>Day 2-3</strong>
+            <p>Launch discount and bundle tests for high-stock products.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span></span>
+          <div>
+            <strong>Day 4-5</strong>
+            <p>Move budget into the best ROAS channel and cap low-return traffic.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span></span>
+          <div>
+            <strong>Day 6-7</strong>
+            <p>Compare revenue lift, profit lift, CPA, and repeat customer response.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+{% endblock %}
+

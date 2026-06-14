@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% set page_title = "Insights - Smart E-Commerce Growth Agent" %}
+
+{% block content %}
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Simple Store Insights</p>
+      <h2>Insights</h2>
+    </div>
+    <div class="status-pill">{{ generated_at }}</div>
+  </header>
+
+  <section class="metric-grid">
+    <article class="metric-card">
+      <span>Sales This Month</span>
+      <strong>{{ analysis.monthlyStats.revenue|money }}</strong>
+      <small>{{ analysis.monthlyStats.units }} items sold</small>
+    </article>
+    <article class="metric-card">
+      <span>Expenses This Month</span>
+      <strong>{{ analysis.monthlyStats.expenses|money }}</strong>
+      <small>Product cost and ads</small>
+    </article>
+    <article class="metric-card">
+      <span>Profit or Loss</span>
+      <strong>{{ analysis.monthlyStats.profit|money }}</strong>
+      <small>{{ analysis.monthlyStats.profitStatus }} this month</small>
+    </article>
+    <article class="metric-card">
+      <span>Current Season</span>
+      <strong>{{ analysis.seasonalDemand.currentSeason }}</strong>
+      <small>{{ analysis.seasonalDemand.asOf }}</small>
+    </article>
+  </section>
+
+  <section class="content-grid">
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Easy Summary</p>
+          <h3>What To Notice</h3>
+        </div>
+      </div>
+      <div class="simple-insight-grid">
+        {% for insight in analysis.simpleInsights %}
+          <div class="simple-insight {{ insight.tone }}">
+            <span>{{ insight.title }}</span>
+            <strong>{{ insight.value }}</strong>
+            <p>{{ insight.detail }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Seasonal Demand</p>
+          <h3>What May Sell More</h3>
+        </div>
+      </div>
+      <div class="signal-list">
+        {% for item in analysis.seasonalDemand.products[:5] %}
+          <div class="signal">
+            <span>{{ item.demandLevel }}</span>
+            <strong>{{ item.product }}</strong>
+            <p>{{ item.trend }}. {{ item.recommendation }}</p>
+          </div>
+        {% endfor %}
+      </div>
+      <p class="seasonal-note">{{ analysis.seasonalDemand.trackingNote }}</p>
+    </article>
+  </section>
+
+  <section class="page-grid two">
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Product List</p>
+          <h3>Products To Watch</h3>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Stock</th>
+              <th>Demand</th>
+              <th>Suggestion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in analysis.products[:8] %}
+              <tr>
+                <td>{{ product.product }}</td>
+                <td>{{ product.category }}</td>
+                <td>{{ product.stockStatus }} ({{ product.stock }})</td>
+                <td>{{ product.demandLevel }}</td>
+                <td>{{ product.suggestion }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Categories</p>
+          <h3>Where Sales Come From</h3>
+        </div>
+      </div>
+      <div class="bar-list">
+        {% for category in analysis.categories[:6] %}
+          <div class="bar-row">
+            <div>
+              <strong>{{ category.category }}</strong>
+              <span>{{ category.units }} units</span>
+            </div>
+            <div class="bar-track">
+              <span style="width: {{ category.share }}%"></span>
+            </div>
+            <small>{{ category.share }}% of sales</small>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+{% endblock %}

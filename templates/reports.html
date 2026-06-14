@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% set page_title = "Reports - Smart E-Commerce Growth Agent" %}
+
+{% block content %}
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Weekly Output</p>
+      <h2>Reports</h2>
+    </div>
+    <button
+      id="generate-page-report"
+      class="secondary-action"
+      type="button"
+      data-seller="{{ seller }}"
+      data-platform="{{ platform }}"
+      data-budget="{{ monthly_budget }}"
+      data-days="{{ horizon_days }}"
+    >
+      Generate Report
+    </button>
+  </header>
+
+  <section class="content-grid">
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Preview</p>
+          <h3>Weekly Report Preview</h3>
+        </div>
+        <span id="report-status">Generated {{ generated_at }}</span>
+      </div>
+      <pre id="report-output">{{ report_preview }}</pre>
+    </article>
+
+    <article class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Files</p>
+          <h3>Saved Reports</h3>
+        </div>
+      </div>
+      <div class="report-list" id="report-list">
+        {% if report_files %}
+          {% for report in report_files %}
+            <div class="report-file">
+              <strong>{{ report.name }}</strong>
+              <span>{{ report.updated }}</span>
+              <p>{{ report.size }} bytes</p>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="signal">
+            <span>Empty</span>
+            <strong>No saved reports yet</strong>
+            <p>Generate a report to create the first markdown file.</p>
+          </div>
+        {% endif %}
+      </div>
+    </article>
+  </section>
+
+  <section class="page-grid three">
+    <article class="metric-card">
+      <span>Revenue Included</span>
+      <strong>{{ analysis.overview.revenue|money }}</strong>
+      <small>{{ analysis.overview.revenueGrowth }}% vs previous week</small>
+    </article>
+    <article class="metric-card">
+      <span>Profit Included</span>
+      <strong>{{ analysis.overview.profit|money }}</strong>
+      <small>{{ analysis.overview.profitGrowth }}% vs previous week</small>
+    </article>
+    <article class="metric-card">
+      <span>Recommendations</span>
+      <strong>{{ analysis.recommendations.promotions|length + analysis.recommendations.bundles|length + analysis.recommendations.adSpend|length }}</strong>
+      <small>Promotion, bundle, and ad actions</small>
+    </article>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/report_page.js') }}"></script>
+{% endblock %}
